@@ -1,1 +1,1 @@
-# Certificates.dev React FreeWeekend Challenges 🚀
+# Certificates.dev React Free Weekend Challenges 🚀
