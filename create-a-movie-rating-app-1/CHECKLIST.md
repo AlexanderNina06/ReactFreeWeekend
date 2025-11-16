@@ -1,0 +1,6 @@
+- The application displays all movies from the `ALL_MOVIES.items` array
+- The movies are rendered using the `map()` function to transform data into JSX elements
+- Each movie displays the name, description, and image correctly
+- Each movie displays the genres in a readable format
+- The movie rating is displayed as stars with a maximum of 5 stars
+- Each mapped item includes a unique `key` prop

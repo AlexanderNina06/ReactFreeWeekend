@@ -1,0 +1,232 @@
+@import "tailwindcss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Tailwind Typography Utilities */
+h1 {
+  @apply text-3xl;
+}
+h2 {
+  @apply text-2xl;
+}
+h3 {
+  @apply text-xl;
+}
+h4 {
+  @apply text-lg;
+}
+h5 {
+  @apply text-base;
+}
+h6 {
+  @apply text-sm;
+}
+p {
+  @apply text-base;
+}
+a {
+  @apply text-blue-500 underline;
+}
+
+/* Form Elements */
+input,
+textarea,
+select {
+  @apply border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150;
+}
+
+/* Button Styles */
+.btn {
+  @apply py-2 px-4 rounded-lg transition-all duration-200 font-medium focus:outline-none focus:ring-2;
+}
+
+.btn-secondary {
+  @apply bg-white border border-blue-500 text-blue-500 hover:bg-blue-50 focus:ring-blue-400;
+}
+
+.btn-primary {
+  @apply bg-blue-500 hover:bg-blue-600 text-white focus:ring-blue-400 hover:shadow-md;
+}
+
+/* App Container */
+.app {
+  @apply flex flex-col items-center justify-start gap-8 p-6 min-h-screen bg-gradient-to-br from-purple-500 to-purple-700;
+}
+
+/* Movie List Grid */
+.movie-list {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full max-w-7xl px-6 pb-8;
+}
+
+/* Movie Item (Old styles - keeping for compatibility) */
+.movie-item {
+  @apply w-full bg-white rounded-xl flex flex-col overflow-hidden shadow-md hover:shadow-lg transition-all duration-200 hover:-translate-y-1;
+}
+
+.movie-item-image-wrapper {
+  @apply h-80 overflow-hidden w-full relative bg-black;
+}
+
+.movie-item-image-wrapper img {
+  @apply w-full h-full object-cover;
+}
+
+.movie-item-content-wrapper {
+  @apply flex-1 p-5 flex flex-col gap-3;
+}
+
+.movie-item-title-wrapper {
+  @apply flex-shrink-0;
+}
+
+.movie-item-title {
+  @apply text-lg font-bold text-gray-900 mb-3;
+}
+
+.movie-item-genres-wrapper {
+  @apply flex items-center gap-2 flex-wrap mb-3;
+}
+
+.movie-item-genre-tag {
+  @apply text-xs bg-blue-500 text-white py-1.5 px-3 rounded-full font-semibold cursor-pointer hover:scale-105 transition-transform;
+}
+
+.movie-item-description-wrapper {
+  @apply flex-1 overflow-hidden;
+}
+
+.movie-item-description {
+  @apply text-sm text-gray-600 leading-relaxed;
+}
+
+.movie-item-rating-wrapper {
+  @apply flex items-center gap-2 mt-auto pt-3;
+}
+
+.movie-item-rating-text {
+  @apply text-sm text-gray-500 font-medium;
+}
+
+.movie-item-star-icon-wrapper {
+  @apply flex gap-0.5;
+}
+
+.movie-item-star-icon {
+  @apply h-5 w-5 cursor-pointer transition-colors;
+}
+
+.movie-item-star-icon-button {
+  @apply transition-all duration-150 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded-sm;
+}
+
+/* Star Colors */
+.movie-item-star-icon.filled {
+  @apply text-yellow-400;
+}
+
+.movie-item-star-icon.empty {
+  @apply text-gray-300;
+}
+
+/* ========================================
+   COMPACT MOVIE CARD STYLES (NEW)
+   ======================================== */
+
+.movie-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 320px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+}
+
+.movie-poster {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: black;
+}
+
+.movie-info {
+  padding: 20px;
+}
+
+.movie-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.genre-tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.genre-tag {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  background: #4285f4;
+  color: white;
+}
+
+.genre-tag:hover {
+  transform: scale(1.05);
+}
+
+.movie-description {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.rating-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rating-label {
+  color: #999;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 18px;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.star.empty {
+  color: #ddd;
+}
