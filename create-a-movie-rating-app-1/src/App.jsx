@@ -1,30 +1,15 @@
 import Card from "./Components/Card"
 import Modal from "./Components/ui/Modal";
 import MovieForm from "./Components/MovieForm";
-import { useState, useEffect } from 'react';
-import { getMovies } from './Components/services/movies-service';  // ← Verificar esta ruta
+import { useState } from 'react';
+import { getMovies } from './Components/services/movies-service';
+import { useFetch } from './hooks/useFetch';
 
 export default function App() {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: movies, setData: setMovies, isLoading } = useFetch(getMovies, []);
+  
   const [showMovieForm, setShowMovieForm] = useState(false);
   const [currentMovie, setCurrentMovie] = useState(null);
-
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        setLoading(true);
-        const data = await getMovies();
-        setMovies(data);
-      } catch (error) {
-        console.error('Error fetching movies:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMovies();
-  }, []);
 
   const calculateStats = () => {
     const totalMovies = movies.length;
@@ -115,15 +100,15 @@ export default function App() {
             <div className="bg-blue-50 rounded-lg px-6 py-3">
               <p className="text-sm text-gray-600 mb-1">Total Movies</p>
               <p className="text-2xl font-bold text-blue-600">
-                {loading ? '...' : stats.totalMovies}
+                {isLoading ? '...' : stats.totalMovies}
               </p>
             </div>
             
             <div className="bg-yellow-50 rounded-lg px-6 py-3">
               <p className="text-sm text-gray-600 mb-1">Average Rating</p>
               <p className="text-2xl font-bold text-yellow-600">
-                {loading ? '...' : stats.averageRating}
-                {!loading && stats.averageRating !== 'N/A' && (
+                {isLoading ? '...' : stats.averageRating}
+                {!isLoading && stats.averageRating !== 'N/A' && (
                   <span className="text-lg text-yellow-500 ml-1">★</span>
                 )}
               </p>
@@ -135,14 +120,14 @@ export default function App() {
           <button 
             className="btn btn-primary" 
             onClick={handleAddMovie}
-            disabled={loading}
+            disabled={isLoading}
           >
             Add Movie
           </button>
           <button 
             className="btn btn-secondary" 
             onClick={handleRemoveAllRatings}
-            disabled={loading}
+            disabled={isLoading}
           >
             Remove All Ratings
           </button>
@@ -162,7 +147,7 @@ export default function App() {
       </Modal>
 
       <div className="movie-list">
-        {loading ? (
+        {isLoading ? (
           <>
             {[...Array(8)].map((_, index) => (
               <MovieSkeleton key={index} />

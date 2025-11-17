@@ -27,15 +27,13 @@ export default function MovieForm({ movie, onSave, onCancel }) {
     genres: ''
   });
 
-  // Ref para el input de nombre
   const nameInputRef = useRef(null);
 
-  // Auto-focus al montar el componente
   useEffect(() => {
     if (nameInputRef.current) {
       nameInputRef.current.focus();
     }
-  }, []); // Array vacío = solo al montar
+  }, []); 
 
   const validateForm = () => {
     const newErrors = {
