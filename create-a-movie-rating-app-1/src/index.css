@@ -11,6 +11,8 @@ body {
 }
 
 /* Tailwind Typography Utilities */
+@import "tailwindcss";
+
 h1 {
   @apply text-3xl;
 }
@@ -35,15 +37,12 @@ p {
 a {
   @apply text-blue-500 underline;
 }
-
-/* Form Elements */
 input,
 textarea,
 select {
   @apply border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150;
 }
 
-/* Button Styles */
 .btn {
   @apply py-2 px-4 rounded-lg transition-all duration-200 font-medium focus:outline-none focus:ring-2;
 }
@@ -56,27 +55,118 @@ select {
   @apply bg-blue-500 hover:bg-blue-600 text-white focus:ring-blue-400 hover:shadow-md;
 }
 
-/* App Container */
 .app {
-  @apply flex flex-col items-center justify-start gap-8 p-6 min-h-screen bg-gradient-to-br from-purple-500 to-purple-700;
+  @apply flex flex-col items-center justify-start gap-8 p-6 min-h-screen bg-gray-50;
 }
 
-/* Movie List Grid */
+.modal-wrapper {
+  @apply absolute inset-0 flex items-center justify-center z-20 bg-gray-800/40 backdrop-blur;
+}
+
+.modal-wrapper-inner {
+  @apply relative shrink-0 w-full max-w-2xl rounded-md flex flex-col shadow-2xl bg-white;
+}
+
+.modal-title {
+  @apply w-full bg-gray-900 px-6 py-4 rounded-t-md text-xl text-white flex items-center justify-between font-semibold;
+}
+
+.modal-close-button {
+  @apply text-gray-300 p-2 hover:text-white transition-colors rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400;
+}
+
+.modal-inner {
+  @apply p-6 space-y-4;
+}
+
+.movie-form-container {
+  @apply p-6 bg-white rounded-xl;
+}
+
+.movie-form-input-wrapper {
+  @apply flex flex-col items-start w-full gap-2 mb-5;
+}
+
+.movie-form-label {
+  @apply text-sm font-semibold text-gray-700;
+}
+
+.movie-form-input,
+.movie-form-textarea,
+.movie-form-select {
+  @apply w-full;
+}
+
+.movie-form-textarea {
+  @apply h-24;
+}
+
+.movie-form-checkbox-label {
+  @apply flex items-center gap-3 cursor-pointer;
+}
+
+.movie-form-checkbox {
+  @apply rounded border-gray-300 text-blue-600 focus:ring-blue-500 transition-colors;
+}
+
+.movie-form-actions-wrapper {
+  @apply flex items-center justify-between w-full gap-3 mt-8 pt-4 border-t border-gray-100;
+}
+
+.movie-form-error {
+  @apply text-red-600 text-sm min-h-[1.25rem];
+}
+
 .movie-list {
   @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full max-w-7xl px-6 pb-8;
 }
 
-/* Movie Item (Old styles - keeping for compatibility) */
 .movie-item {
-  @apply w-full bg-white rounded-xl flex flex-col overflow-hidden shadow-md hover:shadow-lg transition-all duration-200 hover:-translate-y-1;
+  @apply w-full bg-white rounded-xl flex flex-col overflow-hidden shadow-md hover:shadow-lg transition-all duration-200;
 }
 
 .movie-item-image-wrapper {
-  @apply h-80 overflow-hidden w-full relative bg-black;
+  @apply h-80 overflow-hidden w-full relative;
 }
 
-.movie-item-image-wrapper img {
-  @apply w-full h-full object-cover;
+.movie-item-image {
+  @apply object-cover object-center w-full h-full transition-transform duration-200 group-hover:scale-105;
+}
+
+.movie-item-no-image {
+  @apply h-full absolute inset-0 w-full bg-gray-100 flex items-center justify-center;
+}
+
+.movie-item-no-image-text {
+  @apply text-xl text-gray-400 font-medium;
+}
+
+.movie-item-star-wrapper {
+  @apply absolute top-3 right-3 z-10;
+}
+
+.movie-item-star-content-wrapper {
+  @apply absolute inset-0 flex items-center justify-center text-center;
+}
+
+.movie-item-star-rating-icon {
+  @apply h-12 w-12 drop-shadow-lg;
+}
+
+.movie-item-star-content-rating-rated {
+  @apply text-lg text-yellow-900 font-bold drop-shadow-sm;
+}
+
+.movie-item-star-content-rating-not-rated {
+  @apply text-lg text-gray-200 drop-shadow-sm;
+}
+
+.movie-item-theaters-banner {
+  @apply absolute top-3 left-3 bg-gradient-to-r from-red-600 to-red-500 text-white z-10 rounded-full px-3 py-1 shadow-sm flex items-center;
+}
+
+.movie-item-theaters-banner-text {
+  @apply text-xs font-bold text-center;
 }
 
 .movie-item-content-wrapper {
@@ -88,15 +178,15 @@ select {
 }
 
 .movie-item-title {
-  @apply text-lg font-bold text-gray-900 mb-3;
+  @apply text-lg font-semibold truncate mb-3 text-gray-900;
 }
 
 .movie-item-genres-wrapper {
-  @apply flex items-center gap-2 flex-wrap mb-3;
+  @apply flex items-center gap-1 flex-wrap;
 }
 
 .movie-item-genre-tag {
-  @apply text-xs bg-blue-500 text-white py-1.5 px-3 rounded-full font-semibold cursor-pointer hover:scale-105 transition-transform;
+  @apply text-xs bg-blue-500 text-white py-1 px-3 rounded-full font-medium;
 }
 
 .movie-item-description-wrapper {
@@ -108,32 +198,23 @@ select {
 }
 
 .movie-item-rating-wrapper {
-  @apply flex items-center gap-2 mt-auto pt-3;
+  @apply flex items-center justify-between gap-3 mt-auto pt-2;
 }
 
 .movie-item-rating-text {
-  @apply text-sm text-gray-500 font-medium;
+  @apply text-xs text-gray-500 whitespace-nowrap font-medium;
 }
 
 .movie-item-star-icon-wrapper {
-  @apply flex gap-0.5;
+  @apply flex gap-1 flex-1;
 }
 
 .movie-item-star-icon {
-  @apply h-5 w-5 cursor-pointer transition-colors;
+  @apply h-4 w-4 cursor-pointer transition-colors;
 }
 
 .movie-item-star-icon-button {
   @apply transition-all duration-150 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded-sm;
-}
-
-/* Star Colors */
-.movie-item-star-icon.filled {
-  @apply text-yellow-400;
-}
-
-.movie-item-star-icon.empty {
-  @apply text-gray-300;
 }
 
 /* ========================================
