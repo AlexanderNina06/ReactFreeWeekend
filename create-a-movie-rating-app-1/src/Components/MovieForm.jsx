@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const genres = [
   "Drama",
@@ -27,6 +27,16 @@ export default function MovieForm({ movie, onSave, onCancel }) {
     genres: ''
   });
 
+  // Ref para el input de nombre
+  const nameInputRef = useRef(null);
+
+  // Auto-focus al montar el componente
+  useEffect(() => {
+    if (nameInputRef.current) {
+      nameInputRef.current.focus();
+    }
+  }, []); // Array vacío = solo al montar
+
   const validateForm = () => {
     const newErrors = {
       name: '',
@@ -35,7 +45,6 @@ export default function MovieForm({ movie, onSave, onCancel }) {
 
     let isValid = true;
 
-    // Validar nombre (requerido)
     if (!formData.name.trim()) {
       newErrors.name = 'Movie name is required';
       isValid = false;
@@ -87,7 +96,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
     e.preventDefault();
 
     if (!validateForm()) {
-      return; 
+      return;
     }
 
     onSave(formData);
@@ -100,11 +109,13 @@ export default function MovieForm({ movie, onSave, onCancel }) {
   return (
     <form className="movie-form-container" onSubmit={handleSubmit}>
      
+      {/* Movie Name */}
       <div className="movie-form-input-wrapper">
         <label htmlFor="name" className="movie-form-label">
           Movie Name *
         </label>
         <input
+          ref={nameInputRef}
           id="name"
           type="text"
           name="name"
@@ -118,6 +129,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
         )}
       </div>
 
+      {/* Description */}
       <div className="movie-form-input-wrapper">
         <label htmlFor="description" className="movie-form-label">
           Description
@@ -132,6 +144,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
         />
       </div>
 
+      {/* Image URL */}
       <div className="movie-form-input-wrapper">
         <label htmlFor="image" className="movie-form-label">
           Image URL
@@ -147,6 +160,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
         />
       </div>
 
+      {/* Genres */}
       <div className="movie-form-input-wrapper">
         <label htmlFor="genres" className="movie-form-label">
           Genres (select one or more) *
@@ -174,6 +188,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
         )}
       </div>
 
+      {/* Rating */}
       <div className="movie-form-input-wrapper">
         <label htmlFor="rating" className="movie-form-label">
           Rating
@@ -194,6 +209,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
         </select>
       </div>
 
+      {/* In Theaters Checkbox */}
       <div className="movie-form-input-wrapper">
         <label htmlFor="inTheaters" className="movie-form-checkbox-label">
           <input
