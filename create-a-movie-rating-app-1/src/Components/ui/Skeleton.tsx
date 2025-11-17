@@ -1,10 +1,14 @@
-export default function Skeleton({ className = "" }) {
+
+interface SkeletonProps {
+  className?: string;
+}
+
+export default function Skeleton({ className = "" }: SkeletonProps) {
   return (
     <div className={`animate-pulse bg-gray-200 rounded ${className}`}></div>
   );
 }
 
-// Skeleton específico para Movie Card
 export function MovieSkeleton() {
   return (
     <div className="movie-card">

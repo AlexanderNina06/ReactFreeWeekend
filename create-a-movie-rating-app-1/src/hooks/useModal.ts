@@ -1,17 +1,21 @@
-import { useEffect } from 'react';
+import { useEffect, RefObject } from 'react';
 
-export function useModal(modalRef, onClose, isActive) {
+export function useModal(
+  modalRef: RefObject<HTMLDivElement>,
+  onClose: () => void,
+  isActive: boolean
+): void {
   useEffect(() => {
     if (!isActive) return;
 
-    const handleEscape = (e) => {
+    const handleEscape = (e: KeyboardEvent): void => {
       if (e.key === 'Escape') {
         onClose();
       }
     };
 
-    const handleClickOutside = (e) => {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
+    const handleClickOutside = (e: MouseEvent): void => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         onClose();
       }
     };

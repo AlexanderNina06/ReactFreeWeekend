@@ -1,12 +1,22 @@
 import { useState, useEffect } from 'react';
 
-export function useFetch(fetchFunction, initialValue = null) {
-  const [data, setData] = useState(initialValue);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+interface UseFetchReturn<T> {
+  data: T;
+  setData: React.Dispatch<React.SetStateAction<T>>;
+  isLoading: boolean;
+  error: Error | null;
+}
+
+export function useFetch<T>(
+  fetchFunction: () => Promise<T>,
+  initialValue: T
+): UseFetchReturn<T> {
+  const [data, setData] = useState<T>(initialValue);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    let ignore = false; 
+    let ignore = false;
 
     const fetchData = async () => {
       try {
@@ -20,7 +30,7 @@ export function useFetch(fetchFunction, initialValue = null) {
         }
       } catch (err) {
         if (!ignore) {
-          setError(err);
+          setError(err instanceof Error ? err : new Error('Unknown error'));
           console.error('Error fetching data:', err);
         }
       } finally {

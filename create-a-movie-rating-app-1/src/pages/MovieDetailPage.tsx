@@ -1,16 +1,29 @@
+// src/pages/MovieDetailPage.tsx
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getMovies } from '../Components/services/movies-service'
+import { getMovies } from '../Components/services/movies-service';
 import { useFetch } from '../hooks/useFetch';
+import { Movie } from '../types/movie';
 import MovieImage from '../Components/MovieImage';
 import Tag from '../Components/Tag';
 import MovieRatingDisplay from '../Components/MovieRatingDisplay';
 import Skeleton from '../Components/ui/Skeleton';
 
 export default function MovieDetailPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   
-  const { data: movie, isLoading, error } = useFetch(() => getMovie(id), null);
+  // Crear función de fetch que maneja el caso de id undefined
+  const fetchMovie = async (): Promise<Movie | null> => {
+    if (!id) {
+      throw new Error('Movie ID is required');
+    }
+    return getMovie(id);
+  };
+  
+  const { data: movie, isLoading, error } = useFetch<Movie | null>(
+    fetchMovie,
+    null
+  );
 
   if (error) {
     return (
@@ -32,7 +45,6 @@ export default function MovieDetailPage() {
 
   return (
     <div className="w-full max-w-4xl mx-auto p-6">
-      {/* Back Button */}
       <button 
         onClick={() => navigate('/')}
         className="btn btn-secondary mb-6 flex items-center gap-2"
@@ -42,7 +54,6 @@ export default function MovieDetailPage() {
 
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="md:flex">
-          {/* Movie Image */}
           <div className="md:w-1/2">
             <MovieImage
               image={movie.image}
@@ -52,20 +63,17 @@ export default function MovieDetailPage() {
             />
           </div>
 
-          {/* Movie Details */}
           <div className="md:w-1/2 p-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               {movie.name}
             </h1>
 
-            {/* Genres */}
             <div className="flex gap-2 flex-wrap mb-6">
               {movie.genres.map((genre, index) => (
                 <Tag key={index}>{genre}</Tag>
               ))}
             </div>
 
-            {/* Description */}
             <div className="mb-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-2">
                 Description
@@ -75,7 +83,6 @@ export default function MovieDetailPage() {
               </p>
             </div>
 
-            {/* Rating */}
             <div className="mb-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-2">
                 Rating
@@ -86,7 +93,6 @@ export default function MovieDetailPage() {
               />
             </div>
 
-            {/* Additional Info */}
             <div className="space-y-3">
               <div className="flex items-center justify-between py-3 border-t border-gray-200">
                 <span className="text-gray-600 font-medium">Status:</span>
@@ -107,7 +113,6 @@ export default function MovieDetailPage() {
               </div>
             </div>
 
-            {/* Actions */}
             <div className="mt-8 pt-6 border-t border-gray-200">
               <Link 
                 to="/" 

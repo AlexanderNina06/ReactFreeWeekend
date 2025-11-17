@@ -1,25 +1,27 @@
+// src/pages/HomePage.tsx
 import { useState } from 'react';
-import { getMovies } from '../Components/services/movies-service'
+import { getMovies } from '../Components/services/movies-service';
 import { useFetch } from '../hooks/useFetch';
+import { Movie, MovieFormData, MovieStats } from '../types/movie';
 import Card from '../Components/Card';
 import Modal from '../Components/ui/Modal';
 import MovieForm from '../Components/MovieForm';
 import { MovieSkeleton } from '../Components/ui/Skeleton';
 
 export default function HomePage() {
-  const { data: movies, setData: setMovies, isLoading } = useFetch(getMovies, []);
+  const { data: movies, setData: setMovies, isLoading } = useFetch<Movie[]>(getMovies, []);
   
-  const [showMovieForm, setShowMovieForm] = useState(false);
-  const [currentMovie, setCurrentMovie] = useState(null);
+  const [showMovieForm, setShowMovieForm] = useState<boolean>(false);
+  const [currentMovie, setCurrentMovie] = useState<Movie | null>(null);
 
-  const calculateStats = () => {
+  const calculateStats = (): MovieStats => {
     const totalMovies = movies.length;
     
     const moviesWithRatings = movies.filter(movie => 
       Number.isFinite(movie.rating) && movie.rating > 0
     );
     
-    let averageRating = 'N/A';
+    let averageRating: string | number = 'N/A';
     
     if (moviesWithRatings.length > 0) {
       const sum = moviesWithRatings.reduce((acc, movie) => acc + movie.rating, 0);
@@ -34,29 +36,30 @@ export default function HomePage() {
 
   const stats = calculateStats();
 
-  const handleAddMovie = () => {
+  const handleAddMovie = (): void => {
     setCurrentMovie(null);
     setShowMovieForm(true);
   };
 
-  const handleEditMovie = (movie) => {
+  const handleEditMovie = (movie: Movie): void => {
     setCurrentMovie(movie);
     setShowMovieForm(true);
   };
 
-  const handleSaveMovie = (movieData) => {
+  const handleSaveMovie = (movieData: MovieFormData): void => {
     if (currentMovie) {
       setMovies(prevMovies => 
         prevMovies.map(movie => 
           movie.id === currentMovie.id 
-            ? { ...movie, ...movieData }
+            ? { ...movie, ...movieData, rating: Number(movieData.rating) || 0 }
             : movie
         )
       );
     } else {
-      const newMovie = {
+      const newMovie: Movie = {
         id: Date.now(),
-        ...movieData
+        ...movieData,
+        rating: Number(movieData.rating) || 0
       };
       setMovies(prevMovies => [...prevMovies, newMovie]);
     }
@@ -64,16 +67,16 @@ export default function HomePage() {
     setCurrentMovie(null);
   };
 
-  const handleCancelMovie = () => {
+  const handleCancelMovie = (): void => {
     setShowMovieForm(false);
     setCurrentMovie(null);
   };
 
-  const handleRemoveMovie = (movieId) => {
+  const handleRemoveMovie = (movieId: number): void => {
     setMovies(prevMovies => prevMovies.filter(movie => movie.id !== movieId));
   };
 
-  const handleUpdateRating = (movieId, newRating) => {
+  const handleUpdateRating = (movieId: number, newRating: number): void => {
     setMovies(prevMovies =>
       prevMovies.map(movie =>
         movie.id === movieId
@@ -83,7 +86,7 @@ export default function HomePage() {
     );
   };
 
-  const handleRemoveAllRatings = () => {
+  const handleRemoveAllRatings = (): void => {
     setMovies(prevMovies =>
       prevMovies.map(movie => ({ ...movie, rating: 0 }))
     );

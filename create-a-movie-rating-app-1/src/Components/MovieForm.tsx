@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, FormEvent, ChangeEvent } from 'react';
+import { Movie, MovieFormData } from '../types/movie';
 
 const genres = [
   "Drama",
@@ -12,8 +13,19 @@ const genres = [
   "Romance",
 ];
 
-export default function MovieForm({ movie, onSave, onCancel }) {
-  const [formData, setFormData] = useState({
+interface MovieFormProps {
+  movie: Movie | null;
+  onSave: (movieData: MovieFormData) => void;
+  onCancel: () => void;
+}
+
+interface FormErrors {
+  name: string;
+  genres: string;
+}
+
+export default function MovieForm({ movie, onSave, onCancel }: MovieFormProps) {
+  const [formData, setFormData] = useState<MovieFormData>({
     name: movie?.name || '',
     description: movie?.description || '',
     image: movie?.image || '',
@@ -22,21 +34,21 @@ export default function MovieForm({ movie, onSave, onCancel }) {
     rating: movie?.rating || ''
   });
 
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<FormErrors>({
     name: '',
     genres: ''
   });
 
-  const nameInputRef = useRef(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (nameInputRef.current) {
       nameInputRef.current.focus();
     }
-  }, []); 
+  }, []);
 
-  const validateForm = () => {
-    const newErrors = {
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {
       name: '',
       genres: ''
     };
@@ -57,7 +69,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
     return isValid;
   };
 
-  const clearError = (fieldName) => {
+  const clearError = (fieldName: keyof FormErrors): void => {
     if (errors[fieldName]) {
       setErrors(prev => ({
         ...prev,
@@ -66,18 +78,21 @@ export default function MovieForm({ movie, onSave, onCancel }) {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): void => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
     
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
 
-    clearError(name);
+    if (name === 'name' || name === 'genres') {
+      clearError(name as keyof FormErrors);
+    }
   };
 
-  const handleGenreChange = (e) => {
+  const handleGenreChange = (e: ChangeEvent<HTMLSelectElement>): void => {
     const selected = Array.from(e.target.selectedOptions, option => option.value);
     
     setFormData(prev => ({
@@ -90,7 +105,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -100,14 +115,8 @@ export default function MovieForm({ movie, onSave, onCancel }) {
     onSave(formData);
   };
 
-  const handleCancel = () => {
-    onCancel();
-  };
-
   return (
     <form className="movie-form-container" onSubmit={handleSubmit}>
-     
-      {/* Movie Name */}
       <div className="movie-form-input-wrapper">
         <label htmlFor="name" className="movie-form-label">
           Movie Name *
@@ -127,7 +136,6 @@ export default function MovieForm({ movie, onSave, onCancel }) {
         )}
       </div>
 
-      {/* Description */}
       <div className="movie-form-input-wrapper">
         <label htmlFor="description" className="movie-form-label">
           Description
@@ -142,7 +150,6 @@ export default function MovieForm({ movie, onSave, onCancel }) {
         />
       </div>
 
-      {/* Image URL */}
       <div className="movie-form-input-wrapper">
         <label htmlFor="image" className="movie-form-label">
           Image URL
@@ -158,7 +165,6 @@ export default function MovieForm({ movie, onSave, onCancel }) {
         />
       </div>
 
-      {/* Genres */}
       <div className="movie-form-input-wrapper">
         <label htmlFor="genres" className="movie-form-label">
           Genres (select one or more) *
@@ -170,7 +176,7 @@ export default function MovieForm({ movie, onSave, onCancel }) {
           className="movie-form-select"
           value={formData.genres}
           onChange={handleGenreChange}
-          size="5"
+          size={5}
         >
           {genres.map((genre) => (
             <option key={genre} value={genre}>
@@ -186,7 +192,6 @@ export default function MovieForm({ movie, onSave, onCancel }) {
         )}
       </div>
 
-      {/* Rating */}
       <div className="movie-form-input-wrapper">
         <label htmlFor="rating" className="movie-form-label">
           Rating
@@ -207,7 +212,6 @@ export default function MovieForm({ movie, onSave, onCancel }) {
         </select>
       </div>
 
-      {/* In Theaters Checkbox */}
       <div className="movie-form-input-wrapper">
         <label htmlFor="inTheaters" className="movie-form-checkbox-label">
           <input
@@ -222,9 +226,8 @@ export default function MovieForm({ movie, onSave, onCancel }) {
         </label>
       </div>
 
-      {/* Form Actions */}
       <div className="movie-form-actions-wrapper">
-        <button type="button" className="btn btn-secondary" onClick={handleCancel}>
+        <button type="button" className="btn btn-secondary" onClick={onCancel}>
           Cancel
         </button>
         <button type="submit" className="btn btn-primary">

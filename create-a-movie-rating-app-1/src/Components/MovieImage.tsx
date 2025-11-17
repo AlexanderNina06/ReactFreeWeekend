@@ -1,4 +1,12 @@
-export default function MovieImage({ image, name, rating, inTheaters }) {
+
+interface MovieImageProps {
+  image: string;
+  name: string;
+  rating: number;
+  inTheaters: boolean;
+}
+
+export default function MovieImage({ image, name, rating, inTheaters }: MovieImageProps) {
   return (
     <div className="movie-poster-wrapper">
       {image ? (

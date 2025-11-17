@@ -1,5 +1,16 @@
-export default function MovieRatingDisplay({ rating, onRatingChange, interactive = false }) {
-  const handleStarClick = (starIndex) => {
+
+interface MovieRatingDisplayProps {
+  rating: number;
+  onRatingChange?: (newRating: number) => void;
+  interactive?: boolean;
+}
+
+export default function MovieRatingDisplay({ 
+  rating, 
+  onRatingChange, 
+  interactive = false 
+}: MovieRatingDisplayProps) {
+  const handleStarClick = (starIndex: number): void => {
     if (interactive && onRatingChange) {
       const newRating = starIndex + 1;
       onRatingChange(newRating);

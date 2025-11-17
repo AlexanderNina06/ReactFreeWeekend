@@ -1,22 +1,35 @@
+// src/components/Card.tsx
 import { Link } from "react-router-dom";
-import "../index.css";
+import { Movie } from "../types/movie";
 import MovieImage from "./MovieImage";
 import Tag from "./Tag";
 import MovieRatingDisplay from "./MovieRatingDisplay";
 
+interface CardProps {
+  id: number;
+  name: string;
+  description: string;
+  genres: string[];
+  image: string;
+  inTheaters: boolean;
+  rating: number;
+  onEdit: () => void;
+  onRemove: () => void;
+  onRatingChange: (newRating: number) => void;
+}
+
 export default function Card({
   id,
-  name, 
-  description, 
-  genres, 
-  image, 
-  inTheaters, 
+  name,
+  description,
+  genres,
+  image,
+  inTheaters,
   rating,
   onEdit,
   onRemove,
   onRatingChange
-}) {
-  
+}: CardProps) {
   return (
     <div className="movie-card">
       <Link to={`/movie/${id}`}>
