@@ -1,4 +1,8 @@
+import { Link } from "react-router-dom";
 import "../index.css";
+import MovieImage from "./MovieImage";
+import Tag from "./Tag";
+import MovieRatingDisplay from "./MovieRatingDisplay";
 
 export default function Card({
   id,
@@ -13,48 +17,27 @@ export default function Card({
   onRatingChange
 }) {
   
-  const handleStarClick = (starIndex) => {
-    const newRating = starIndex + 1;
-    onRatingChange(newRating);
-  };
-
   return (
     <div className="movie-card">
-      <div className="movie-poster-wrapper">
-        {image ? (
-          <img 
-            src={image} 
-            alt={name + " Movie Poster"}
-            className="movie-poster" 
-          />
-        ) : (
-          <div className="no-image-placeholder">
-            No Image
-          </div>
-        )}
-
-        {rating > 0 && (
-          <div className="rating-badge">
-            <span className="rating-star">★</span>
-            <span className="rating-number">{rating}</span>
-          </div>
-        )}
-
-        {inTheaters && (
-          <div className="now-playing-badge">
-            Now Playing
-          </div>
-        )}
-      </div>
+      <Link to={`/movie/${id}`}>
+        <MovieImage 
+          image={image}
+          name={name}
+          rating={rating}
+          inTheaters={inTheaters}
+        />
+      </Link>
       
       <div className="movie-info">
-        <h2 className="movie-title">{name}</h2>
+        <Link to={`/movie/${id}`}>
+          <h2 className="movie-title hover:text-blue-600 transition-colors">
+            {name}
+          </h2>
+        </Link>
         
         <div className="genre-tags">
           {genres.map((genre, index) => (
-            <button key={index} className="genre-tag">
-              {genre}
-            </button>
+            <Tag key={index}>{genre}</Tag>
           ))}
         </div>
         
@@ -62,26 +45,12 @@ export default function Card({
           {description}
         </p>
         
-        <div className="rating-section">
-          <span className="rating-label">Rating: {rating || 0}/5</span>
-          <div className="stars">
-            {Array(5).fill(null).map((_, index) => {
-              const isFilled = rating && index < rating;
-              return (
-                <span
-                  key={index} 
-                  className={`star ${isFilled ? 'filled' : 'empty'}`}
-                  onClick={() => handleStarClick(index)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  ★
-                </span>
-              );
-            })}
-          </div>
-        </div>
+        <MovieRatingDisplay 
+          rating={rating}
+          onRatingChange={onRatingChange}
+          interactive={true}
+        />
 
-        {/* Botones de acción */}
         <div className="flex gap-2 mt-4">
           <button 
             className="btn btn-primary flex-1"

@@ -7,3 +7,16 @@ export async function getMovies() {
     }, 1000);
   });
 }
+
+export async function getMovie(id) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const movie = ALL_MOVIES.items.find(m => m.id === parseInt(id));
+      if (movie) {
+        resolve(movie);
+      } else {
+        reject(new Error('Movie not found'));
+      }
+    }, 800);
+  });
+}
